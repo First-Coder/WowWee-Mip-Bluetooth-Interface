@@ -1,0 +1,563 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="de">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title>MIP-Raspberry--Control-Interface</title>
+		
+		<link rel="stylesheet" type="text/css" href="css/tether.min.css"/>
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
+		<link rel="stylesheet" type="text/css" href="css/bootstrap-table.min.css"/>
+		<link rel="stylesheet" type="text/css" href="css/bootstrap-slider.min.css"/>
+		<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css"/>
+		<link rel="stylesheet" type="text/css" href="css/style.css"/>
+		
+		<script src="js/jquery-2.2.0.js"></script>
+		<script src="js/tether.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/bootstrap-table.min.js"></script>
+		<script src="js/bootstrap-slider.min.js"></script>
+	</head>
+	
+	<body>
+		<!-- Header -->
+		<nav class="navbar fixed-top navbar-inverse bg-inverse">
+			<a class="navbar-brand" href="#">MIP / Raspberry Control Interface</a>
+		</nav>
+		
+		<!-- Content -->
+		<div class="container first-container">
+			<div class="card">
+				<div class="card-block card-header">
+					<h4 class="card-title"><i class="fa fa-list" aria-hidden="true"></i> MIP Robotor</h4>
+					<h6 class="card-subtitle text-muted">Hier werden alle gefunden MIP Robotor aufgelistet</h6>
+				</div>
+				<div class="card-block">
+					<table id="mipTable" data-card-view="true" data-classes="table-no-bordered table-hover table"
+						data-striped="true" data-pagination="true" data-search="true">
+						<thead>
+							<th data-field="name">MIP Name</th>
+							<th data-field="hardwareversion">Hardwareversion</th>
+							<th data-field="firmewareversion">Firmewareversion</th>
+							<th data-field="id">ID</th>
+							<th data-field="actions" data-align="center" data-halign="left">Aktionen</th>
+						</thead>
+						<tbody></tbody>
+					</table>
+				</div>
+			</div>
+			
+			<div class="card">
+				<div class="card-block card-header">
+					<h4 class="card-title"><i class="fa fa-tint" aria-hidden="true"></i> MIP Led</h4>
+					<h6 class="card-subtitle text-muted">Hier k&ouml;nnen Sie die Farbe der LED &auml;ndern</h6>
+				</div>
+				<div class="card-block">
+					<div class="row">
+						<div class="col-xl-3 col-lg-3 col-md-3 mb-2">
+							<input id="valR" class="form-control" type="number" placeholder="Rot"/>
+						</div>
+						<div class="col-xl-3 col-lg-3 col-md-3 mb-2">
+							<input id="valG" class="form-control" type="number" placeholder="Gr&uuml;n"/>
+						</div>
+						<div class="col-xl-3 col-lg-3 col-md-3 mb-2">
+							<input id="valB" class="form-control" type="number" placeholder="Blau"/>
+						</div>
+						<div class="col-xl-3 col-lg-3 col-md-3 mb-2">
+							<button onClick="setRobotColor();" style="width: 100%;" class="btn btn-primary" disabled><i class="fa fa-paper-plane" aria-hidden="true"></i> Setzen</button>
+						</div>
+					</div>
+					<p>Farben k&ouml;nnen von 0 bis 255 gegeben werden. Falls Sie Hilfe bei der Farbwahl brauchen, so klicken Sie <a href="http://www.farb-tabelle.de/de/farbtabelle.htm" target="_blank">hier</a>.
+				</div>
+			</div>
+			
+			<div class="card">
+				<div class="card-block card-header">
+					<h4 class="card-title" onClick="myFunction();"><i class="fa fa-mail-forward" aria-hidden="true"></i> MIP Bewegungen</h4>
+					<h6 class="card-subtitle text-muted">Hier k&ouml;nnen Sie den verbunden MIP bewegen</h6>
+				</div>
+				<div class="card-block">
+					<div class="row">
+						<div class="col-xl-6 col-lg-6 col-md-6" style="text-align: center;">
+							<div class="my-3">
+								<p class="m-0" style="text-align: left;">Enfernung in m</p>
+								<input id="distanceMSlider" type="text" data-slider-min="0" data-slider-max="2" data-slider-step="1" data-slider-value="0"/>
+								<font class="ml-3">Entfernung: <i id="distanceMSliderVal">0</i></font>
+							</div>
+							<div class="my-3">
+								<p class="m-0" style="text-align: left;">Enfernung in cm</p>
+								<input id="distanceCmSlider" type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="0"/>
+								<font class="ml-3">Entfernung: <i id="distanceCmSliderVal">0</i></font>
+							</div>
+						</div>
+						<div class="col-xl-6 col-lg-6 col-md-6" style="text-align: center;">
+							<button onClick="direction();" class="btn btn-primary my-2" style="width: 100%;"><i class="fa fa-mail-reply" aria-hidden="true"></i> Linksdrehung</button>
+							<button onClick="direction(true);" class="btn btn-primary my-2" style="width: 100%;"><i class="fa fa-mail-forward" aria-hidden="true"></i> Rechtsdrehung</button>
+							<button onClick="driveForward();" class="btn btn-success my-2" style="width: 100%;"><i class="fa fa-arrow-up" aria-hidden="true"></i> Fahren</button>
+							<button onClick="driveForward(true);" class="btn btn-success my-2" style="width: 100%;"><i class="fa fa-arrow-down" aria-hidden="true"></i> Fahren</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="card">
+				<div class="card-block card-header">
+					<h4 class="card-title"><i class="fa fa-music" aria-hidden="true"></i> MIP Sounds</h4>
+					<h6 class="card-subtitle text-muted">Hier k&ouml;nnen Sie verschiedene T&ouml;ne beim MIP wiedergeben</h6>
+				</div>
+				<div class="card-block">
+					<table id="mipSoundTable" data-toggle="table" data-card-view="false" data-classes="table-no-bordered table-hover table"
+						data-striped="true" data-pagination="true" data-search="true">
+						<thead>
+							<th data-field="name">Sound Name</th>
+							<th data-field="actions" data-align="center" data-halign="left">Aktionen</th>
+						</thead>
+						<tbody>
+							<tr>
+								<td>ONEKHZ_500MS_8K16BIT</td>
+								<td><button onClick="PlaySound('ONEKHZ_500MS_8K16BIT');" class="btn btn-primary btn-sm" disabled><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>ACTION_BURPING</td>
+								<td><button onClick="PlaySound('ACTION_BURPING');" class="btn btn-primary btn-sm" disabled><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>ACTION_DRINKING</td>
+								<td><button onClick="PlaySound('ACTION_DRINKING');" class="btn btn-primary btn-sm" disabled><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>ACTION_EATING</td>
+								<td><button onClick="PlaySound('ACTION_EATING');" class="btn btn-primary btn-sm" disabled><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>ACTION_FARTING_SHORT</td>
+								<td><button onClick="PlaySound('ACTION_FARTING_SHORT');" class="btn btn-primary btn-sm" disabled><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>ACTION_OUT_OF_BREATH</td>
+								<td><button onClick="PlaySound('ACTION_OUT_OF_BREATH');" class="btn btn-primary btn-sm" disabled><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>BOXING_PUNCHCONNECT_1</td>
+								<td><button onClick="PlaySound('BOXING_PUNCHCONNECT_1');" class="btn btn-primary btn-sm" disabled><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>BOXING_PUNCHCONNECT_2</td>
+								<td><button onClick="PlaySound('BOXING_PUNCHCONNECT_2');" class="btn btn-primary btn-sm" disabled><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>BOXING_PUNCHCONNECT_3</td>
+								<td><button onClick="PlaySound('BOXING_PUNCHCONNECT_3');" class="btn btn-primary btn-sm" disabled><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>FREESTYLE_TRACKING_1</td>
+								<td><button onClick="PlaySound('FREESTYLE_TRACKING_1');" class="btn btn-primary btn-sm" disabled><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_1</td>
+								<td><button onClick="PlaySound('MIP_1');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_2</td>
+								<td><button onClick="PlaySound('MIP_2');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_3</td>
+								<td><button onClick="PlaySound('MIP_3');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_APP</td>
+								<td><button onClick="PlaySound('MIP_APP');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_AWWW</td>
+								<td><button onClick="PlaySound('MIP_AWWW');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_BIG_SHOT</td>
+								<td><button onClick="PlaySound('MIP_BIG_SHOT');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_BLEH</td>
+								<td><button onClick="PlaySound('MIP_BLEH');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_BOOM</td>
+								<td><button onClick="PlaySound('MIP_BOOM');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_BYE</td>
+								<td><button onClick="PlaySound'MIP_BYE');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_CONVERSE_1</td>
+								<td><button onClick="PlaySound('MIP_CONVERSE_1');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_CONVERSE_2</td>
+								<td><button onClick="PlaySound('MIP_CONVERSE_2');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_DROP</td>
+								<td><button onClick="PlaySound('MIP_DROP');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_DUNNO</td>
+								<td><button onClick="PlaySound('MIP_DUNNO');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_FALL_OVER_1</td>
+								<td><button onClick="PlaySound('MIP_FALL_OVER_1');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_FALL_OVER_2</td>
+								<td><button onClick="PlaySound('MIP_FALL_OVER_2');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_FIGHT</td>
+								<td><button onClick="PlaySound('MIP_FIGHT');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_GAME</td>
+								<td><button onClick="PlaySound('MIP_GAME');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_GLOAT</td>
+								<td><button onClick="PlaySound('MIP_GLOAT');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_GO</td>
+								<td><button onClick="PlaySound('MIP_GO');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_GOGOGO</td>
+								<td><button onClick="PlaySound('MIP_GOGOGO');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_GRUNT_1</td>
+								<td><button onClick="PlaySound('MIP_GRUNT_1');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_GRUNT_2</td>
+								<td><button onClick="PlaySound('MIP_GRUNT_2');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_GRUNT_3</td>
+								<td><button onClick="PlaySound('MIP_GRUNT_3');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_HAHA_GOT_IT</td>
+								<td><button onClick="PlaySound('MIP_HAHA_GOT_IT');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_HI_CONFIDENT</td>
+								<td><button onClick="PlaySound('MIP_HI_CONFIDENT');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_HI_NOT_SURE</td>
+								<td><button onClick="PlaySound('MIP_HI_NOT_SURE');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_HI_SCARED</td>
+								<td><button onClick="PlaySound('MIP_HI_SCARED');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_HUH</td>
+								<td><button onClick="PlaySound('MIP_HUH');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_HUMMING_1</td>
+								<td><button onClick="PlaySound('MIP_HUMMING_1');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_HUMMING_2</td>
+								<td><button onClick="PlaySound('MIP_HUMMING_2');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_HURT</td>
+								<td><button onClick="PlaySound('MIP_HURT');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_HUUURGH</td>
+								<td><button onClick="PlaySound('MIP_HUUURGH');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_IN_LOVE</td>
+								<td><button onClick="PlaySound('MIP_IN_LOVE');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_IT</td>
+								<td><button onClick="PlaySound('MIP_IT');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_JOKE</td>
+								<td><button onClick="PlaySound('MIP_JOKE');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_K</td>
+								<td><button onClick="PlaySound('MIP_K');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_LOOP_1</td>
+								<td><button onClick="PlaySound('MIP_LOOP_1');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_LOOP_2</td>
+								<td><button onClick="PlaySound('MIP_LOOP_2');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_LOW_BATTERY</td>
+								<td><button onClick="PlaySound('MIP_LOW_BATTERY');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_MIPPEE</td>
+								<td><button onClick="PlaySound('MIP_MIPPEE');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_MORE</td>
+								<td><button onClick="PlaySound('MIP_MORE');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_MUAH_HA</td>
+								<td><button onClick="PlaySound('MIP_MUAH_HA');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_MUSIC</td>
+								<td><button onClick="PlaySound('MIP_MUSIC');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_OBSTACLE</td>
+								<td><button onClick="PlaySound('MIP_OBSTACLE');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_OHOH</td>
+								<td><button onClick="PlaySound('MIP_OHOH');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_OH_YEAH</td>
+								<td><button onClick="PlaySound('MIP_OH_YEAH');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_OOPSIE</td>
+								<td><button onClick="PlaySound('MIP_OOPSIE');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_OUCH_1</td>
+								<td><button onClick="PlaySound('MIP_OUCH_1');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_OUCH_2</td>
+								<td><button onClick="PlaySound('MIP_OUCH_2');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_PLAY</td>
+								<td><button onClick="PlaySound('MIP_PLAY');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_PUSH</td>
+								<td><button onClick="PlaySound('MIP_PUSH');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_RUN</td>
+								<td><button onClick="PlaySound('MIP_RUN');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_SHAKE</td>
+								<td><button onClick="PlaySound('MIP_SHAKE');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_SIGH</td>
+								<td><button onClick="PlaySound('MIP_SIGH');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_SINGING</td>
+								<td><button onClick="PlaySound('MIP_SINGING');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_SNEEZE</td>
+								<td><button onClick="PlaySound('MIP_SNEEZE');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_SNORE</td>
+								<td><button onClick="PlaySound('MIP_SNORE');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_STACK</td>
+								<td><button onClick="PlaySound('MIP_STACK');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_SWIPE_1</td>
+								<td><button onClick="PlaySound('MIP_SWIPE_1');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_SWIPE_2</td>
+								<td><button onClick="PlaySound('MIP_SWIPE_2');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_TRICKS</td>
+								<td><button onClick="PlaySound('MIP_TRICKS');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_TRIIICK</td>
+								<td><button onClick="PlaySound('MIP_TRIIICK');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_TRUMPET</td>
+								<td><button onClick="PlaySound('MIP_TRUMPET');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_WAAAAA</td>
+								<td><button onClick="PlaySound('MIP_WAAAAA');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_WAKEY</td>
+								<td><button onClick="PlaySound('MIP_WAKEY');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_WHEEE</td>
+								<td><button onClick="PlaySound('MIP_WHEEE');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_WHISTLING</td>
+								<td><button onClick="PlaySound('MIP_WHISTLING');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_WHOAH</td>
+								<td><button onClick="PlaySound('MIP_WHOAH');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_WOO</td>
+								<td><button onClick="PlaySound('MIP_WOO');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_YEAH</td>
+								<td><button onClick="PlaySound('MIP_YEAH');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_YEEESSS</td>
+								<td><button onClick="PlaySound('MIP_YEEESSS');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_YO</td>
+								<td><button onClick="PlaySound('MIP_YO');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MIP_YUMMY</td>
+								<td><button onClick="PlaySound('MIP_YUMMY');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MOOD_ACTIVATED</td>
+								<td><button onClick="PlaySound('MOOD_ACTIVATED');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MOOD_ANGRY</td>
+								<td><button onClick="PlaySound('MOOD_ANGRY');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MOOD_ANXIOUS</td>
+								<td><button onClick="PlaySound('MOOD_ANXIOUS');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MOOD_BORING</td>
+								<td><button onClick="PlaySound('MOOD_BORING');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MOOD_CRANKY</td>
+								<td><button onClick="PlaySound('MOOD_CRANKY');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MOOD_ENERGETIC</td>
+								<td><button onClick="PlaySound('MOOD_ENERGETIC');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MOOD_EXCITED</td>
+								<td><button onClick="PlaySound('MOOD_EXCITED');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MOOD_GIDDY</td>
+								<td><button onClick="PlaySound('MOOD_GIDDY');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MOOD_GRUMPY</td>
+								<td><button onClick="PlaySound('MOOD_GRUMPY');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MOOD_HAPPY</td>
+								<td><button onClick="PlaySound('MOOD_HAPPY');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MOOD_IDEA</td>
+								<td><button onClick="PlaySound('MOOD_IDEA');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MOOD_IMPATIENT</td>
+								<td><button onClick="PlaySound('MOOD_IMPATIENT');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MOOD_NICE</td>
+								<td><button onClick="PlaySound('MOOD_NICE');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MOOD_SAD</td>
+								<td><button onClick="PlaySound('MOOD_SAD');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MOOD_SHORT</td>
+								<td><button onClick="PlaySound('MOOD_SHORT');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MOOD_SLEEPY</td>
+								<td><button onClick="PlaySound('MOOD_SLEEPY');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>MOOD_TIRED</td>
+								<td><button onClick="PlaySound('MOOD_TIRED');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>SOUND_BOOST</td>
+								<td><button onClick="PlaySound('SOUND_BOOST');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>SOUND_CAGE</td>
+								<td><button onClick="PlaySound('SOUND_CAGE');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>SOUND_GUNS</td>
+								<td><button onClick="PlaySound('SOUND_GUNS');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>SOUND_ZINGS</td>
+								<td><button onClick="PlaySound('SOUND_ZINGS');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>SHORT_MUTE_FOR_STOP</td>
+								<td><button onClick="PlaySound('SHORT_MUTE_FOR_STOP');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+							<tr>
+								<td>FREESTYLE_TRACKING_2</td>
+								<td><button onClick="PlaySound('FREESTYLE_TRACKING_2');" class="btn btn-primary btn-sm"><i class="fa fa-play" aria-hidden="true"></i> Abspielen</button></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		
+		<!-- Footer -->
+		<nav class="navbar fixed-bottom navbar-inverse bg-inverse">
+			<div><i class="fa fa-copyright" aria-hidden="true"></i> by Benjamin Hoheisel & Lukas Gundermann</div>
+		</nav>
+		
+		<!-- Links
+			https://github.com/seiyria/bootstrap-slider
+			
+		-->
+		
+		<!-- Javascript -->
+		<script src="/socket.io/socket.io.js"></script>
+		<script>
+			var socket	=	io.connect();
+		</script>
+		<script src="index.js"></script>
+	</body>
+</html>
+
