@@ -1,7 +1,10 @@
+// Soald Seite geladen ist...
 $(document).ready(function() {
 	socket.on('getBotconnections', function(data) {
-		var infos		=	JSON.parse(data);
-		var rows		=	[];
+		$('#mipTable').bootstrapTable('removeAll');
+		
+		var infos			=	JSON.parse(data);
+		var rows			=	[];
 		
 		for(var row of infos)
 		{
@@ -12,6 +15,8 @@ $(document).ready(function() {
 				actions:			'<button id="'+row.id+'" onClick="Connect(\''+row.id+'\');" class="btn btn-primary btn-sm"><i class="fa fa-sign-in" aria-hidden="true"></i> Verbinden</button>',
 				id:					row.id
 			});
+			
+			isConnected		=	row.id;
 		};
 		
 		$('#mipTable').bootstrapTable('append', rows);
@@ -29,26 +34,26 @@ $(document).ready(function() {
 				document.getElementById(infos.id+"_fw").innerHTML = infos.value;
 				break;
 		};
-		console.log(infos);
 	});
 });
 
+// Funktion zur Richtungsänderung
 function direction(right)
 {
-	socket.emit('direction', (!right) ? (-10) : 10);
+	socket.emit('direction', (!right) ? (-30) : 30);
 };
-
+// Funktion zur Bewegung
 function driveForward(backward)
 {
 	var driveInCm 	=	(($('#distanceMSlider').val()) * 10)+$('#distanceCmSlider').val();
 	socket.emit('drive', (backward) ? (driveInCm*-1) : driveInCm);
 };
-
+// Funktion zum spielen eines Sounds
 function PlaySound(sound)
 {
 	socket.emit('playSound', sound);
 };
-
+// Funktion zum setzen der LED Farbe
 function setRobotColor()
 {
 	var rval	=	document.getElementById('valR').value;
@@ -72,14 +77,14 @@ function setRobotColor()
 	
 	socket.emit('setLed', rgb2hex(rval), rgb2hex(gval), rgb2hex(bval));
 };
-
+// Funktion zum umrechnen von Farbwerten 0-255 zu Hexadezimalzahlen
 function rgb2hex(value)
 {
 	return	("0x" + parseInt(value,10).toString(16));
 		
 	//http://jsfiddle.net/Mottie/xcqpF/1/light/
 };
-
+// Funktion zum Verbinden mit MIP
 function Connect(id)
 {
 	socket.emit('botConnect', id);
@@ -98,32 +103,12 @@ function Connect(id)
 		}
 		else
 		{
-			alert("UPS");
+			alert("Da ist etwas schief gelaufen!");
 		};
 	});
 };
 
-/* Function to Change to Connectiontype */
-function ChangeConnectTypeClass()
-{
-	var btn		=	$("#connectType");
-	if(btn.hasClass("btn-primary"))
-	{
-		btn.removeClass("btn-primary");
-		btn.addClass("btn-success");
-		
-		document.getElementById("connectType").innerHTML = "<i class='fa fa-plug'></i> Kabel";
-	}
-	else
-	{
-		btn.removeClass("btn-success");
-		btn.addClass("btn-primary");
-		
-		document.getElementById("connectType").innerHTML = "<i class='fa fa-bluetooth'></i> Bluetooth";
-	};
-};
-
-/* Bootstrap tables */
+// Bootstrap Tabellen
 $('#mipTable').bootstrapTable({
 	formatNoMatches: function()
 	{
@@ -132,7 +117,7 @@ $('#mipTable').bootstrapTable({
 });
 
 
-/* Sliders */
+// Schieberegler für Lautstärke und Entfernung
 $("#soundSlider").slider();
 $("#soundSlider").on("slide", function(slideEvt) {
 	$("#soundSliderVal").text(slideEvt.value);

@@ -26,6 +26,8 @@
 		
 		<!-- Content -->
 		<div class="container first-container">
+			
+			<!-- Card 1 enthält die MIP Verbindungstabelle -->
 			<div class="card">
 				<div class="card-block card-header">
 					<h4 class="card-title"><i class="fa fa-list" aria-hidden="true"></i> MIP Robotor</h4>
@@ -45,7 +47,8 @@
 					</table>
 				</div>
 			</div>
-			
+
+			<!-- Card 2 enthält Eingabefelder und Buttons für die Farbänderung der RGB LED  -->			
 			<div class="card">
 				<div class="card-block card-header">
 					<h4 class="card-title"><i class="fa fa-tint" aria-hidden="true"></i> MIP Led</h4>
@@ -70,6 +73,7 @@
 				</div>
 			</div>
 			
+			<!-- Card 3 enthält Eingabefelder, Buttons und Schieberegler für die Bewegung und Bewegungsrichtung des MIP  -->	
 			<div class="card">
 				<div class="card-block card-header">
 					<h4 class="card-title" onClick="myFunction();"><i class="fa fa-mail-forward" aria-hidden="true"></i> MIP Bewegungen</h4>
@@ -90,15 +94,16 @@
 							</div>
 						</div>
 						<div class="col-xl-6 col-lg-6 col-md-6" style="text-align: center;">
-							<button onClick="direction();" class="btn btn-primary my-2" style="width: 100%;"><i class="fa fa-mail-reply" aria-hidden="true"></i> Linksdrehung</button>
-							<button onClick="direction(true);" class="btn btn-primary my-2" style="width: 100%;"><i class="fa fa-mail-forward" aria-hidden="true"></i> Rechtsdrehung</button>
-							<button onClick="driveForward();" class="btn btn-success my-2" style="width: 100%;"><i class="fa fa-arrow-up" aria-hidden="true"></i> Fahren</button>
-							<button onClick="driveForward(true);" class="btn btn-success my-2" style="width: 100%;"><i class="fa fa-arrow-down" aria-hidden="true"></i> Fahren</button>
+							<button onClick="direction();" class="btn btn-primary my-2" style="width: 100%;" disabled><i class="fa fa-mail-reply" aria-hidden="true"></i> Linksdrehung</button>
+							<button onClick="direction(true);" class="btn btn-primary my-2" style="width: 100%;" disabled><i class="fa fa-mail-forward" aria-hidden="true"></i> Rechtsdrehung</button>
+							<button onClick="driveForward();" class="btn btn-success my-2" style="width: 100%;" disabled><i class="fa fa-arrow-up" aria-hidden="true"></i> Fahren</button>
+							<button onClick="driveForward(true);" class="btn btn-success my-2" style="width: 100%;" disabled><i class="fa fa-arrow-down" aria-hidden="true"></i> Fahren</button>
 						</div>
 					</div>
 				</div>
 			</div>
 			
+			<!-- Card 4 enthält eine Tabelle mit allen möglichen abspielbaren Tönen des Roboters -->	
 			<div class="card">
 				<div class="card-block card-header">
 					<h4 class="card-title"><i class="fa fa-music" aria-hidden="true"></i> MIP Sounds</h4>
